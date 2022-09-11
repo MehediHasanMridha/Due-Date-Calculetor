@@ -10,10 +10,10 @@
 </head>
 
 <body>
-    <div class="flex flex-row justify-around my-5">
+    <div class="flex flex-row justify-around my-5 w-[550px]">
         <div class="space-y-0">
             <h5 class="font-bold">Month</h5>
-            <select id="month" class="border border-red-600 w-[250px] focus:outline-none" onChange="update(),vac1(),vac2(),vac3(),vac4(),vac5()">
+            <select id="month" class="border border-red-600 w-[100px] lg:w-[250px] focus:outline-none" onChange="update(),vac1(),vac2(),vac3(),vac4(),vac5()">
                 <option value="1" selected="selected">January </option>
                 <option value="2">February </option>
                 <option value="3">March</option>
@@ -30,7 +30,7 @@
         </div>
         <div class="space-y-0">
             <h5 class="font-bold">Day</h5>
-            <select id="day" class="border border-red-600 w-[250px] focus:outline-none" onchange="update(),vac1(),vac2(),vac3(),vac4(),vac5()">
+            <select id="day" class="border border-red-600 w-[100px] lg:w-[250px] focus:outline-none" onchange="update(),vac1(),vac2(),vac3(),vac4(),vac5()">
                 <option value="" disabled="">Day</option>
                 <option value="01" selected="selected">01 </option>
                 <option value="02">
@@ -97,7 +97,7 @@
         </div>
         <div class="space-y-0">
             <h5 class="font-bold">Year</h5>
-            <select id="year" class="border border-red-600 w-[250px] focus:outline-none" onchange="update(),vac1(),vac2(),vac3(),vac4(),vac5()">
+            <select id="year" class="border border-red-600 w-[100px] lg:w-[250px] focus:outline-none" onchange="update(),vac1(),vac2(),vac3(),vac4(),vac5()">
                 <option value="" disabled="">Year</option>
                 <option value="2016" data-calc-value="2016">
                     2016 </option>
@@ -117,28 +117,28 @@
         </div>
     </div>
     <div class="bg-black h-1 w-[550px] mx-auto my-10"></div>
-    <div class=" space-y-6">
-        <div class="flex flex-row justify-between mx-16">
+    <div class=" space-y-6 w-[550px] lg:w-full">
+        <div class="flex flex-row justify-between mx-1 lg:mx-16">
             <label class="font-bold" for="show">The expected foaling date:</label>
             <input type="text" class="border border-red-600 w-[250px] focus:outline-none px-2" readonly placeholder="Expected Foaling Date" id="show" value="">
         </div>
-        <div class="flex flex-row justify-between mx-16">
+        <div class="flex flex-row justify-between mx-1 lg:mx-16">
             <label class="font-bold" for="vac1">5 month Rhino vaccination:</label>
             <input type="text" class="border border-red-600 w-[250px] focus:outline-none px-2" readonly placeholder="Expected Foaling Date" id="vac1" value="">
         </div>
-        <div class="flex flex-row justify-between mx-16">
+        <div class="flex flex-row justify-between mx-1 lg:mx-16">
             <label class="font-bold" for="vac2">7 month Rhino vaccination:</label>
             <input type="text" class="border border-red-600 w-[250px] focus:outline-none px-2" readonly placeholder="Expected Foaling Date" id="vac2" value="">
         </div>
-        <div class="flex flex-row justify-between mx-16">
+        <div class="flex flex-row justify-between mx-1 lg:mx-16">
             <label class="font-bold" for="vac3">Remove fescue from diet:</label>
             <input type="text" class="border border-red-600 w-[250px] focus:outline-none px-2" readonly placeholder="Expected Foaling Date" id="vac3" value="">
         </div>
-        <div class="flex flex-row justify-between mx-16">
+        <div class="flex flex-row justify-between mx-1 lg:mx-16">
             <label class="font-bold" for="vac4">9 month Rhino vaccination:</label>
             <input type="text" class="border border-red-600 w-[250px] focus:outline-none px-2" readonly placeholder="Expected Foaling Date" id="vac4" value="">
         </div>
-        <div class="flex flex-row justify-between mx-16">
+        <div class="flex flex-row justify-between mx-1 lg:mx-16">
             <label class="font-bold" for="vac5">Eastern/Western encephalomyelitis,
             West Nile, Tetanus and Influenza
             vaccination:</label>

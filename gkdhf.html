@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Calculator Pomoc</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: Lato;
+            src: url("file:///android_asset/fonts/Lato-Regular.ttf")
+        }
+
+        @font-face {
+            font-family: Backspace;
+            src: url("file:///android_asset/fonts/backspace.ttf")
+        }
+
+
+        body {
+            font-family: Lato;
+            font-size: 10pt;
+        }
+
+        h1 {
+            color: blue;
+        }
+
+        p {
+            color: black;
+        }
+
+        div {
+            margin: 1px;
+        }
+
+        .danger {
+            background: linear-gradient(to top, #510000 0%, #a30000 100%);
+            border: solid 1px black;
+            color: white;
+            padding: 1px 10px;
+
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 10pt;
+            font-weight: lighter;
+        }
+
+        .warning {
+            background: linear-gradient(to top, #8c4c0f 0%, #b97413 100%);
+            border: solid 1px black;
+            color: white;
+            padding: 1px 10px;
+
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 10pt;
+            font-weight: lighter;
+        }
+
+        .backspace {
+            font-family: Backspace;
+        }
+
+
+        .operation {
+            background: linear-gradient(to top, #0f430c 0%, #198100 100%);
+            border: solid 1px black;
+            color: white;
+            padding: 1px 10px;
+
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 10pt;
+            font-weight: lighter;
+        }
+
+        .numeric {
+            background: linear-gradient(to top, #909090 0%, #bfbfbf 100%);
+            border: solid 1px black;
+            color: black;
+            padding: 1px 10px;
+
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 10pt;
+            font-weight: lighter;
+        }
+
+        table,
+        th {
+            border: 1px solid black;
+            border-collapse: collapse;
+            vertical-align: top;
+        }
+
+        .borderBottom {
+            border-bottom: 1px solid black;
+        }
+
+        td {
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+        }
+
+        .display {
+            background: #dfdfdf;
+            color: black;
+            padding: 1px 10px;
+            width: 60%;
+
+            border: solid 1px #444;
+            color: black;
+            padding: 1px 10px;
+
+            border-radius: 2px;
+            text-align: right;
+            font-size: 10pt;
+        }
+    </style>
+
+
+</head>
+
+<body bgcolor=white>
+    <b>Simple Calculator</b> jest emulatorem prostego czterodziałaniowego kalkulatora z pamięcią i obliczeniami
+    procentowymi. Kalkulatory tego typu pracują w trybie natychmiastowego wykonania. Operacja jest wykonywana
+    natychmiast po wprowadzeniu następnej operacji. Dlatego użytkownik powinien być świadom, że matematyczna kolejność
+    wykonywania działań nie jest tu zachowana. Na przykład jeśli wprowadzisz następujące wyrażenie <div class="numeric">
+        2</div>
+    <div class="operation">+</div>
+    <div class="numeric">2</div>
+    <div class="operation">&#xd7;</div>
+    <div class="numeric">2</div>
+    <div class="warning">=</div> to otrzymasz <b>8</b> zamiast <b>6</b>!
+
+    Sofik Bsmrstu, [9/9/2022 1:48 AM]
+    <h2>Opis przycisków</h2>
+    <table border="1px" width="95%" cellpadding="10">
+        <tr>
+            <th>Klawisze</th>
+            <th>Opis</th>
+        </tr>
+        <tr>
+            <td>
+                <div class="danger">AC</div>
+            </td>
+            <td>
+                Kasuje wszystkie rejestry i operacje poza zawartością pamięci (M).
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="danger">MRC</div>
+            </td>
+            <td>
+                Wyświetla i kasuje zawartość pamięci. Pierwsze wciśnięcie wyprowadza zawartość pamięci na wyświetlacz.
+                Drugie wciśnięcie kasuje jej zawartość. Pierwsze wciśnięcie sygnalizowane jest zmianą barwy symbolu M na
+                czerwony. Można anulować kasowanie pamięci wciskając dowolny przycisk oprócz MRC.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="danger backspace">&#x232b;</div>
+            </td>
+            <td>
+                Przycisk backspace służy do kasowania ostatnio wprowadzonych cyfr (możliwe jest również skasowanie całej
+                liczby). Użycie tego przycisku możliwe jest tylko w trybie edycji - czyli wtedy gdy wprowadzana jest
+                liczba. Nie można go użyć gdy wyświetlane są rezultaty operacji.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="numeric">0</div>
+                <div class="numeric">1</div>
+                <div class="numeric">2</div>
+                <div class="numeric">3</div>
+                <div class="numeric">4</div>
+                <div class="numeric">5</div>
+                <div class="numeric">6</div>
+                <div class="numeric">7</div>
+                <div class="numeric">8</div>
+                <div class="numeric">9</div>
+                <div class="numeric">.</div>
+                <div class="numeric">+/-</div>
+            </td>
+            <td>
+                Klawiatura numeryczna służy do wprowadzania nowej liczby. Kalkulator pracuje w dwóch trybach <b>tryb
+                    edycji</b> oraz <b>tryb wyświetlania wyników operacji</b>. Aby przejść do <b>trybu edycji</b> należy
+                zacząć wprowadzać nową liczbę. <b>Tryb edycji</b> oznaczony jest przez zmianę koloru wprowadzanej liczby
+                na granatowy. Przycisk <div class="numeric">+/-</div> może być użyty w obu trybach.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                Wykonuje poprzednio ustawioną operację na wprowadzonych liczbach. Dodatkowo kalkulator przechodzi w tryb
+                constant (przykłady poniżej).
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="operation">+</div>
+                <div class="operation">-</div>
+                <div class="operation">&#xd7;</div>
+                <div class="operation">&divide;</div>
+            </td>
+            <td>
+                Wykonuje poprzednio ustawioną operację oraz ustawia nową operację zgodnie z wciśniętym klawiszem
+                (dodawanie, odejmowanie, mnożenie, dzielenie). Przykładowo, jeśli zostały wciśnięte następujące
+                przyciski: <div class="numeric">1</div>
+                <div class="operation">+</div>
+                <div class="numeric">2</div>. To wciśnięcie przycisku <div class="operation">-</div> spowoduje wykonanie
+                operacji dodawania dwóch liczb (1 oraz 2), a następnie ustawienie nowej operacji tj. odejmowania. Zadaną
+                operację można teraz dowolnie zmieniać na dowolną inna, dopóki nie wprowadzimy liczby. Przykładowo,
+                jeśli wykonalismy powyżej podaną sekwencję i podaliśmu na końcu <div class="operation">-</div> i
+                stwierdziliśmy, że to pomyłka, to możemy ją zmienić na dowolną inna np. <div class="operation">&divide;
+                </div>.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="operation">&percnt;</div>
+            </td>
+            <td>
+                Pozwala na wykonywanie następujących obliczeń procentowych:
+                <ul>
+                    <li>wynik = A + A * B&percnt; (<div class="numeric">A</div>
+                        <div class="operation">+</div>
+                        <div class="numeric">B</div>
+                        <div class="operation">&percnt;</div>)
+
+                        Sofik Bsmrstu, [9/9/2022 1:48 AM]
+                    <li>wynik = A - A * B&percnt; (<div class="numeric">A</div>
+                        <div class="operation">-</div>
+                        <div class="numeric">B</div>
+                        <div class="operation">&percnt;</div>)
+                    <li>wynik = A * B&percnt; (<div class="numeric">A</div>
+                        <div class="operation">&#xd7;</div>
+                        <div class="numeric">B</div>
+                        <div class="operation">&percnt;</div>)
+                    <li>wynik&percnt; = A / B (<div class="numeric">A</div>
+                        <div class="operation">&divide;</div>
+                        <div class="numeric">B</div>
+                        <div class="operation">&percnt;</div>)
+                </ul>
+                Więcej przykładów użycia znajdziesz poniżej.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="operation">M+</div>
+                <div class="operation">M-</div>
+            </td>
+            <td>
+                <div class="operation">M+</div> dodaje wyświetlaną liczbę do pamięci, <div class="operation">M-</div>
+                odejmuje od zawartości pamięci wyświetlaną licznę.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="operation">&Sqrt;</div>
+            </td>
+            <td>
+                Wykonuje pierwiastek drugiego stopnia.
+            </td>
+        </tr>
+
+
+    </table>
+
+    <h2>Przykłady</h2>
+    <table border="0px" width="95%" cellpadding="10">
+        <tr>
+            <th>Przykłady obliczeń</th>
+            <th>Sekwencja wciskanych przycisków</th>
+            <th>Wyniki</th>
+        </tr>
+        <tr>
+            <td>
+                <h3>Mieszane obliczenia</h3>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>150 - 37 + 12 = 125</td>
+            <td>
+                <div class="numeric">1</div>
+                <div class="numeric">5</div>
+                <div class="numeric">0</div>
+                <div class="operation">-</div>
+                <div class="numeric">3</div>
+                <div class="numeric">7</div>
+                <div class="operation">+</div>
+                <div class="numeric">1</div>
+                <div class="numeric">2</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">125</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Użycie przycisku backspace do korekcji wprowadzanej liczby.<br>53 + 3<del>87</del> = 56</td>
+            <td>
+                <div class="numeric">5</div>
+                <div class="numeric">3</div>
+                <div class="operation">+</div>
+                <div class="numeric">3</div>
+                <div class="numeric">8</div>
+                <div class="numeric">7</div>
+                <div class="danger backspace">&#x232b;</div>
+                <div class="danger backspace">&#x232b;</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">56</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Zmiania ostatniej błędnie wprowadzonej operacji.<br>100 + 27 <del>&#xd7; &divide;</del> - 5 = 122</td>
+            <td>
+                <div class="numeric">1</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">+</div>
+                <div class="numeric">2</div>
+                <div class="numeric">7</div>
+                <div class="operation">&#xd7;</div>
+                <div class="operation">&divide;</div>
+                <div class="operation">-</div>
+                <div class="numeric">5</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">122</div>
+            </td>
+        </tr>
+
+        <tr class="borderBottom">
+            <td>(5 + 7) &divide; 3 &#xd7; 7.4 = 29.6</td>
+            <td>
+                <div class="numeric">5</div>
+                <div class="operation">+</div>
+                <div class="numeric">7</div>
+                <div class="operation">&divide;</div>
+                <div class="numeric">3</div>
+                <div class="operation">&#xd7;</div>
+                <div class="numeric">7</div>
+                <div class="numeric">.</div>
+                <div class="numeric">4</div>
+
+                Sofik Bsmrstu, [9/9/2022 1:48 AM]
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">29.6</div>
+            </td>
+        </tr>
+        <!-- constant operations -->
+        <tr>
+            <td>
+                <h3>Tryb constant</h3>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>2 + <u>8</u> = 10</td>
+            <td>
+                <div class="numeric">2</div>
+                <div class="operation">+</div>
+                <div class="numeric">8</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">10</div>
+            </td>
+        </tr>
+        <tr>
+            <td>4 + <u>8</u> = 12</td>
+            <td>
+                <div class="numeric">4</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">12</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>8 - <u>5</u> = 3</td>
+            <td>
+                <div class="numeric">8</div>
+                <div class="operation">-</div>
+                <div class="numeric">5</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">3</div>
+            </td>
+        </tr>
+        <tr>
+            <td>6 - <u>5</u> = 1</td>
+            <td>
+                <div class="numeric">6</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">1</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td><u>4</u> &#xd7; 3 = 12</td>
+            <td>
+                <div class="numeric">4</div>
+                <div class="operation">&#xd7;</div>
+                <div class="numeric">3</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">12</div>
+            </td>
+        </tr>
+        <tr>
+            <td><u>4</u> &#xd7; 5 = 20</td>
+            <td>
+                <div class="numeric">5</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">20</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>9 &divide; <u>3</u> = 3</td>
+            <td>
+                <div class="numeric">9</div>
+                <div class="operation">&divide;</div>
+                <div class="numeric">3</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">3</div>
+            </td>
+        </tr>
+        <tr class="borderBottom">
+            <td>6 &divide; <u>3</u> = 2</td>
+            <td>
+                <div class="numeric">6</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">2</div>
+            </td>
+        </tr>
+        <!-- constant operations -->
+        <tr>
+            <td>
+                <h3>Potęgowanie i odwrotność</h3>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>2<sup>4</sup> = 16</td>
+            <td>
+                <div class="numeric">2</div>
+                <div class="operation">&#xd7;</div>
+                <div class="warning">=</div>
+                <div class="warning">=</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">16</div>
+            </td>
+        </tr>
+        <tr>
+            <td>(1 / 2)<sup>4</sup> = 0.0625</td>
+            <td>
+                <div class="numeric">2</div>
+                <div class="operation">&divide;</div>
+                <div class="warning">=</div>
+                <div class="warning">=</div>
+                <div class="warning">=</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">0.0625</div>
+            </td>
+        </tr>
+        <tr>
+            <td>(3 / 5)<sup>4</sup> = 0.1296</td>
+            <td>
+                <div class="numeric">3</div>
+                <div class="operation">&divide;</div>
+                <div class="numeric">5</div>
+                <div class="operation">&#xd7;</div>
+                <div class="warning">=</div>
+                <div class="warning">=</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">0.0625</div>
+            </td>
+        </tr>
+        <tr>
+
+            Sofik Bsmrstu, [9/9/2022 1:48 AM]
+            <td>1 / 8 = 0.125</td>
+            <td>
+                <div class="numeric">8</div>
+                <div class="operation">&divide;</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">0.125</div>
+            </td>
+        </tr>
+        <tr class="borderBottom">
+            <td>1 / (5 &#xd7; 3 + 1) = 0.0625</td>
+            <td>
+                <div class="numeric">5</div>
+                <div class="operation">&#xd7;</div>
+                <div class="numeric">3</div>
+                <div class="operation">+</div>
+                <div class="numeric">1</div>
+                <div class="operation">&divide;</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">0.0625</div>
+            </td>
+        </tr>
+        <!-- sqrt -->
+        <tr>
+            <td>
+                <h3>Pierwiastek kwadratowy</h3>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr class="borderBottom">
+            <td>&Sqrt; 144 = 12</td>
+            <td>
+                <div class="numeric">144</div>
+                <div class="operation">&Sqrt;</div>
+            </td>
+            <td>
+                <div class="display">12</div>
+            </td>
+        </tr>
+        <!-- percentage -->
+        <tr>
+            <td>
+                <h3>Procenty</h3>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>1500 &#xd7; 20% = 300</td>
+            <td>
+                <div class="numeric">1</div>
+                <div class="numeric">5</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">&#xd7;</div>
+                <div class="numeric">2</div>
+                <div class="numeric">0</div>
+                <div class="operation">%</div>
+            </td>
+            <td>
+                <div class="display">300</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Zmiana wartości <br>z 20% na 30% w powyższej formule bez konieczności ponownego wprowadzania całego
+                wyrażenia.<br>1500 &#xd7; 30% = 450</td>
+            <td>
+                <div class="numeric">3</div>
+                <div class="numeric">0</div>
+                <div class="operation">%</div>
+            </td>
+            <td>
+                <div class="display">450</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Mając powyższy rezultat możemy łatwo obliczyć następującą formułę.<br>1500 &#xd7; 30% + 1500 = 1950</td>
+            <td>
+                <div class="numeric">+</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">1950</div>
+            </td>
+        </tr>
+        <tr>
+            <td>45 / 200 &#xd7; 100&percnt; = 22.5%</td>
+            <td>
+                <div class="numeric">4</div>
+                <div class="numeric">5</div>
+                <div class="operation">&divide;</div>
+                <div class="numeric">2</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">%</div>
+            </td>
+            <td>
+                <div class="display">22.5</div>
+            </td>
+        </tr>
+        <tr>
+            <td>1500 + (1500 &#xd7; 22%) = 1830</td>
+            <td>
+                <div class="numeric">1</div>
+                <div class="numeric">5</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">+</div>
+                <div class="numeric">2</div>
+                <div class="numeric">2</div>
+                <div class="operation">%</div>
+            </td>
+            <td>
+                <div class="display">1830</div>
+            </td>
+        </tr>
+        <tr class="borderBottom">
+            <td>1500 - (1500 &#xd7; 22%) = 1170</td>
+            <td>
+                <div class="numeric">1</div>
+                <div class="numeric">5</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">-</div>
+                <div class="numeric">2</div>
+                <div class="numeric">2</div>
+                <div class="operation">%</div>
+
+                Sofik Bsmrstu, [9/9/2022 1:48 AM]
+            </td>
+            <td>
+                <div class="display">1170</div>
+            </td>
+        </tr>
+        <!-- memory -->
+        <tr>
+            <td>
+                <h3>Pamięć</h3>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>1200 &#xd7; 12% = 144 &rightarrow; M+</td>
+            <td>
+                <div class="numeric">1</div>
+                <div class="numeric">2</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">&#xd7;</div>
+                <div class="numeric">1</div>
+                <div class="numeric">2</div>
+                <div class="operation">%</div>
+                <div class="operation">M+</div>
+            </td>
+            <td>
+                <div class="display">144</div>
+            </td>
+        </tr>
+        <tr>
+            <td>45.2 &#xd7; 5 - 25 = 201 &rightarrow; M+</td>
+            <td>
+                <div class="numeric">4</div>
+                <div class="numeric">5</div>
+                <div class="numeric">.</div>
+                <div class="numeric">2</div>
+                <div class="operation">&#xd7;</div>
+                <div class="numeric">5</div>
+                <div class="operation">-</div>
+                <div class="numeric">2</div>
+                <div class="numeric">5</div>
+                <div class="operation">M+</div>
+            </td>
+            <td>
+                <div class="display">201</div>
+            </td>
+        </tr>
+        <tr>
+            <td>100 &rightarrow; M+</td>
+            <td>
+                <div class="numeric">1</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">M+</div>
+            </td>
+            <td>
+                <div class="display">100</div>
+            </td>
+        </tr>
+        <tr>
+            <td>400 - 30% = 280 &rightarrow; M-</td>
+            <td>
+                <div class="numeric">4</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">-</div>
+                <div class="numeric">3</div>
+                <div class="numeric">0</div>
+                <div class="operation">%</div>
+                <div class="operation">M-</div>
+            </td>
+            <td>
+                <div class="display">280</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Wyświetlenie zawartości pamięci.<br>144 + 201+ 100 - 280 = 165</td>
+            <td>
+                <div class="danger">MRC</div>
+            </td>
+            <td>
+                <div class="display">165</div>
+            </td>
+        </tr>
+        <tr>
+            <td>Kasowanie zawartości pamięci (drugie wciśnięcie MRC).</td>
+            <td>
+                <div class="danger">MRC</div>
+            </td>
+            <td>
+                <div class="display">165</div>
+            </td>
+        </tr>
+        <tr class="borderBottom">
+            <td colspan="3"><br>Zauważ, że operacja kasowania pamięci może być anulowana przez wciśnięcie innego
+                przycisku niż MRC. Po anulowaniu, pierwsze wciśnięcie klawisza MRC powoduje powtórnie wyświetlenie
+                zawartości pamięci.</td>
+        </tr>
+        <!-- combining -->
+        <tr>
+            <td>
+                <h3>Użycie pamięci do przeprowadzania złożonych obliczeń</h3>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr class="borderBottom">
+            <td>(2100 + 500) &divide; (620 - 420) + 2 = 15</td>
+            <td>
+                <div class="numeric">6</div>
+                <div class="numeric">2</div>
+                <div class="numeric">0</div>
+                <div class="operation">-</div>
+                <div class="numeric">4</div>
+                <div class="numeric">2</div>
+                <div class="numeric">0</div>
+                <div class="operation">M+</div>
+
+                <div class="numeric">2</div>
+                <div class="numeric">1</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+                <div class="operation">+</div>
+                <div class="numeric">5</div>
+                <div class="numeric">0</div>
+                <div class="numeric">0</div>
+
+                Sofik Bsmrstu, [9/9/2022 1:48 AM]
+                <div class="operation">&divide;</div>
+                <div class="danger">MRC</div>
+                <div class="operation">+</div>
+                <div class="numeric">2</div>
+                <div class="warning">=</div>
+            </td>
+            <td>
+                <div class="display">15</div>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
